@@ -4,9 +4,7 @@
 
 include:
   - openstack-folsom.common.openstackcommon
-  - saltmine.pkgs.epel
-  - saltmine.pkgs.percona
-#  - saltmine.pkgs.ius
+  - openstack-folsom.common.pkgs
   - openstack-folsom.common.openvswitch
 
 <%

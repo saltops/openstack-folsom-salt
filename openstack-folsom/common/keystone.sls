@@ -3,9 +3,7 @@
 # openstack-folsom keystone setup
 
 include:
-  - saltmine.pkgs.epel
-  - saltmine.pkgs.percona
-  - saltmine.pkgs.ius
+  - openstack-folsom.common.pkgs
 
 <%
   openstack_folsom_mysql_root_username=pillar['openstack_folsom_mysql_root_username']

@@ -1,4 +1,7 @@
 ## OpenStack settings
+openstack_folsom_source: 'internet'
+
+# MySQL
 openstack_folsom_mysql_root_username: 'root'
 openstack_folsom_mysql_root_password: 'test'
 
