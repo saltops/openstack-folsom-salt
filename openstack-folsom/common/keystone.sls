@@ -8,21 +8,21 @@ include:
   - saltmine.pkgs.ius
 
 <%
-  saltmine_openstack_mysql_root_username=pillar['saltmine_openstack_mysql_root_username']
-  saltmine_openstack_mysql_root_password=pillar['saltmine_openstack_mysql_root_password']
+  openstack_folsom_mysql_root_username=pillar['openstack_folsom_mysql_root_username']
+  openstack_folsom_mysql_root_password=pillar['openstack_folsom_mysql_root_password']
 
-  saltmine_openstack_keystone_user=pillar['saltmine_openstack_keystone_user']
-  saltmine_openstack_keystone_pass=pillar['saltmine_openstack_keystone_pass']
-  saltmine_openstack_keystone_ip=pillar['saltmine_openstack_keystone_ip']
+  openstack_folsom_keystone_user=pillar['openstack_folsom_keystone_user']
+  openstack_folsom_keystone_pass=pillar['openstack_folsom_keystone_pass']
+  openstack_folsom_keystone_ip=pillar['openstack_folsom_keystone_ip']
 
-  saltmine_openstack_keystone_service_token=pillar['saltmine_openstack_keystone_service_token']
-  saltmine_openstack_keystone_service_endpoint=pillar['saltmine_openstack_keystone_service_endpoint']
-  saltmine_openstack_keystone_service_tenant_name=pillar['saltmine_openstack_keystone_service_tenant_name']
+  openstack_folsom_keystone_service_token=pillar['openstack_folsom_keystone_service_token']
+  openstack_folsom_keystone_service_endpoint=pillar['openstack_folsom_keystone_service_endpoint']
+  openstack_folsom_keystone_service_tenant_name=pillar['openstack_folsom_keystone_service_tenant_name']
 
-  saltmine_openstack_OS_USERNAME=pillar['saltmine_openstack_OS_USERNAME']
-  saltmine_openstack_OS_PASSWORD=pillar['saltmine_openstack_OS_PASSWORD']
-  saltmine_openstack_OS_TENANT_NAME=pillar['saltmine_openstack_OS_TENANT_NAME']
-  saltmine_openstack_keystone_ext_ip=pillar['saltmine_openstack_keystone_ext_ip']
+  openstack_folsom_OS_USERNAME=pillar['openstack_folsom_OS_USERNAME']
+  openstack_folsom_OS_PASSWORD=pillar['openstack_folsom_OS_PASSWORD']
+  openstack_folsom_OS_TENANT_NAME=pillar['openstack_folsom_OS_TENANT_NAME']
+  openstack_folsom_keystone_ext_ip=pillar['openstack_folsom_keystone_ext_ip']
 
 %>
 
@@ -87,9 +87,9 @@ keystone-db-create:
 keystone-db-init:
   cmd.run:
     - name: | 
-        mysql -u root -e "GRANT ALL ON keystone.* TO '${saltmine_openstack_keystone_user}'@'%' IDENTIFIED BY '${saltmine_openstack_keystone_pass}';"
+        mysql -u root -e "GRANT ALL ON keystone.* TO '${openstack_folsom_keystone_user}'@'%' IDENTIFIED BY '${openstack_folsom_keystone_pass}';"
     - unless: |
-        echo '' | mysql keystone -u ${saltmine_openstack_keystone_user} -h 0.0.0.0 --password=${saltmine_openstack_keystone_pass}
+        echo '' | mysql keystone -u ${openstack_folsom_keystone_user} -h 0.0.0.0 --password=${openstack_folsom_keystone_pass}
 
 openstack-keystone-service:
   service:
@@ -105,7 +105,7 @@ keystone-conf:
     - before: |
         mysql:.*
     - after: | 
-        mysql://${saltmine_openstack_keystone_user}:${saltmine_openstack_keystone_pass}@${saltmine_openstack_keystone_ip}/keystone
+        mysql://${openstack_folsom_keystone_user}:${openstack_folsom_keystone_pass}@${openstack_folsom_keystone_ip}/keystone
     - limit: ^connection\ =
     - require:
       - pkg: openstack-keystone-pkg
@@ -126,10 +126,10 @@ keystone-basic-script:
     - source: salt://saltmine/files/openstack/keystone-basic.sh
     - template: mako
     - defaults:
-        saltmine_openstack_keystone_ip: ${saltmine_openstack_keystone_ip}
-        saltmine_openstack_OS_PASSWORD: ${saltmine_openstack_OS_PASSWORD}
-        saltmine_openstack_OS_TENANT_NAME: ${saltmine_openstack_OS_TENANT_NAME}
-        saltmine_openstack_keystone_service_tenant_name: ${saltmine_openstack_keystone_service_tenant_name}
+        openstack_folsom_keystone_ip: ${openstack_folsom_keystone_ip}
+        openstack_folsom_OS_PASSWORD: ${openstack_folsom_OS_PASSWORD}
+        openstack_folsom_OS_TENANT_NAME: ${openstack_folsom_OS_TENANT_NAME}
+        openstack_folsom_keystone_service_tenant_name: ${openstack_folsom_keystone_service_tenant_name}
     - require:
       - service: openstack-keystone-service
   cmd.wait:
@@ -143,10 +143,10 @@ keystone-endpoints-script:
     - source: salt://saltmine/files/openstack/keystone-endpoints-basic.sh
     - template: mako
     - defaults:
-        saltmine_openstack_keystone_ip: ${saltmine_openstack_keystone_ip}
-        saltmine_openstack_keystone_ext_ip: ${saltmine_openstack_keystone_ext_ip}
-        saltmine_openstack_keystone_user: ${saltmine_openstack_keystone_user}
-        saltmine_openstack_keystone_pass: ${saltmine_openstack_keystone_pass}
+        openstack_folsom_keystone_ip: ${openstack_folsom_keystone_ip}
+        openstack_folsom_keystone_ext_ip: ${openstack_folsom_keystone_ext_ip}
+        openstack_folsom_keystone_user: ${openstack_folsom_keystone_user}
+        openstack_folsom_keystone_pass: ${openstack_folsom_keystone_pass}
     - require:
       - service: openstack-keystone-service
   cmd.wait:
@@ -160,10 +160,10 @@ keystone-creds-script:
     - source: salt://saltmine/files/openstack/keystonerc
     - template: mako
     - defaults:
-        saltmine_openstack_OS_USERNAME: ${saltmine_openstack_OS_USERNAME}
-        saltmine_openstack_OS_PASSWORD: ${saltmine_openstack_OS_PASSWORD}
-        saltmine_openstack_OS_TENANT_NAME: ${saltmine_openstack_OS_TENANT_NAME}
-        saltmine_openstack_keystone_ext_ip: ${saltmine_openstack_keystone_ext_ip}
+        openstack_folsom_OS_USERNAME: ${openstack_folsom_OS_USERNAME}
+        openstack_folsom_OS_PASSWORD: ${openstack_folsom_OS_PASSWORD}
+        openstack_folsom_OS_TENANT_NAME: ${openstack_folsom_OS_TENANT_NAME}
+        openstack_folsom_keystone_ext_ip: ${openstack_folsom_keystone_ext_ip}
     - require:
       - service: openstack-keystone-service
   cmd.wait:

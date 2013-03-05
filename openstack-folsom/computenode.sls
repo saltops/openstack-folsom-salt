@@ -10,30 +10,30 @@ include:
   - openstack-folsom.common.cinder
 
 <%
-  saltmine_openstack_mysql_root_username=pillar['saltmine_openstack_mysql_root_username']
-  saltmine_openstack_mysql_root_password=pillar['saltmine_openstack_mysql_root_password']
+  openstack_folsom_mysql_root_username=pillar['openstack_folsom_mysql_root_username']
+  openstack_folsom_mysql_root_password=pillar['openstack_folsom_mysql_root_password']
 
-  saltmine_openstack_keystone_ip=pillar['saltmine_openstack_keystone_ip']
-  saltmine_openstack_keystone_auth_port=pillar['saltmine_openstack_keystone_auth_port']
+  openstack_folsom_keystone_ip=pillar['openstack_folsom_keystone_ip']
+  openstack_folsom_keystone_auth_port=pillar['openstack_folsom_keystone_auth_port']
 
-  saltmine_openstack_keystone_service_token=pillar['saltmine_openstack_keystone_service_token']
-  saltmine_openstack_keystone_service_endpoint=pillar['saltmine_openstack_keystone_service_endpoint']
-  saltmine_openstack_keystone_service_tenant_name=pillar['saltmine_openstack_keystone_service_tenant_name']
+  openstack_folsom_keystone_service_token=pillar['openstack_folsom_keystone_service_token']
+  openstack_folsom_keystone_service_endpoint=pillar['openstack_folsom_keystone_service_endpoint']
+  openstack_folsom_keystone_service_tenant_name=pillar['openstack_folsom_keystone_service_tenant_name']
 
-  saltmine_openstack_glance_user=pillar['saltmine_openstack_glance_user']
-  saltmine_openstack_glance_pass=pillar['saltmine_openstack_glance_pass']
+  openstack_folsom_glance_user=pillar['openstack_folsom_glance_user']
+  openstack_folsom_glance_pass=pillar['openstack_folsom_glance_pass']
 
-  saltmine_openstack_quantum_user=pillar['saltmine_openstack_quantum_user']
-  saltmine_openstack_quantum_pass=pillar['saltmine_openstack_quantum_pass']
+  openstack_folsom_quantum_user=pillar['openstack_folsom_quantum_user']
+  openstack_folsom_quantum_pass=pillar['openstack_folsom_quantum_pass']
 
-  saltmine_openstack_nova_user=pillar['saltmine_openstack_nova_user']
-  saltmine_openstack_nova_pass=pillar['saltmine_openstack_nova_pass']
+  openstack_folsom_nova_user=pillar['openstack_folsom_nova_user']
+  openstack_folsom_nova_pass=pillar['openstack_folsom_nova_pass']
 
-  saltmine_openstack_OS_USERNAME=pillar['saltmine_openstack_OS_USERNAME']
-  saltmine_openstack_OS_PASSWORD=pillar['saltmine_openstack_OS_PASSWORD']
-  saltmine_openstack_OS_TENANT_NAME=pillar['saltmine_openstack_OS_TENANT_NAME']
-  saltmine_openstack_keystone_ext_ip=pillar['saltmine_openstack_keystone_ext_ip']
-  saltmine_openstack_keystone_metadata_port=pillar['saltmine_openstack_keystone_metadata_port']
+  openstack_folsom_OS_USERNAME=pillar['openstack_folsom_OS_USERNAME']
+  openstack_folsom_OS_PASSWORD=pillar['openstack_folsom_OS_PASSWORD']
+  openstack_folsom_OS_TENANT_NAME=pillar['openstack_folsom_OS_TENANT_NAME']
+  openstack_folsom_keystone_ext_ip=pillar['openstack_folsom_keystone_ext_ip']
+  openstack_folsom_keystone_metadata_port=pillar['openstack_folsom_keystone_metadata_port']
 %>
 
 openstack-quantum-service:
@@ -67,7 +67,7 @@ openstack-quantum-conf:
     - name: /etc/quantum/quantum.conf
     - source: salt://saltmine/files/openstack/quantum.conf
     - defaults:
-        saltmine_openstack_keystone_ip: ${saltmine_openstack_keystone_ip}
+        openstack_folsom_keystone_ip: ${openstack_folsom_keystone_ip}
     - template: mako
     - require:
       - pkg: openstack-quantum-openvswitch-pkg
@@ -84,11 +84,11 @@ openstack-nova-api-paste-ini:
     - name: /etc/nova/api-paste.ini
     - source: salt://saltmine/files/openstack/nova-api-paste.ini
     - defaults:
-        saltmine_openstack_nova_user: ${saltmine_openstack_nova_user}
-        saltmine_openstack_nova_pass: ${saltmine_openstack_nova_pass}
-        saltmine_openstack_keystone_ip: ${saltmine_openstack_keystone_ip}
-        saltmine_openstack_keystone_service_tenant_name: ${saltmine_openstack_keystone_service_tenant_name}
-        saltmine_openstack_keystone_auth_port: ${saltmine_openstack_keystone_auth_port}
+        openstack_folsom_nova_user: ${openstack_folsom_nova_user}
+        openstack_folsom_nova_pass: ${openstack_folsom_nova_pass}
+        openstack_folsom_keystone_ip: ${openstack_folsom_keystone_ip}
+        openstack_folsom_keystone_service_tenant_name: ${openstack_folsom_keystone_service_tenant_name}
+        openstack_folsom_keystone_auth_port: ${openstack_folsom_keystone_auth_port}
     - template: mako
     - require:
       - pkg: openstack-quantum-openvswitch-pkg
@@ -100,14 +100,14 @@ openstack-nova-conf:
     - name: /etc/nova/nova.conf
     - source: salt://saltmine/files/openstack/nova.conf
     - defaults:
-        saltmine_openstack_nova_user: ${saltmine_openstack_nova_user}
-        saltmine_openstack_nova_pass: ${saltmine_openstack_nova_pass}
-        saltmine_openstack_keystone_ip: ${saltmine_openstack_keystone_ip}
-        saltmine_openstack_keystone_service_tenant_name: ${saltmine_openstack_keystone_service_tenant_name}
-        saltmine_openstack_keystone_auth_port: ${saltmine_openstack_keystone_auth_port}
-        saltmine_openstack_keystone_ext_ip: ${saltmine_openstack_keystone_ext_ip}
-        saltmine_openstack_quantum_user: ${saltmine_openstack_quantum_user}
-        saltmine_openstack_quantum_pass: ${saltmine_openstack_quantum_pass}
+        openstack_folsom_nova_user: ${openstack_folsom_nova_user}
+        openstack_folsom_nova_pass: ${openstack_folsom_nova_pass}
+        openstack_folsom_keystone_ip: ${openstack_folsom_keystone_ip}
+        openstack_folsom_keystone_service_tenant_name: ${openstack_folsom_keystone_service_tenant_name}
+        openstack_folsom_keystone_auth_port: ${openstack_folsom_keystone_auth_port}
+        openstack_folsom_keystone_ext_ip: ${openstack_folsom_keystone_ext_ip}
+        openstack_folsom_quantum_user: ${openstack_folsom_quantum_user}
+        openstack_folsom_quantum_pass: ${openstack_folsom_quantum_pass}
     - template: mako
     - require:
       - pkg: openstack-quantum-openvswitch-pkg

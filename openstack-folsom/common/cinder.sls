@@ -3,18 +3,18 @@
 # openstack-folsom cinder setup
 
 <%
-  saltmine_openstack_cinder_user=pillar['saltmine_openstack_cinder_user']
-  saltmine_openstack_cinder_pass=pillar['saltmine_openstack_cinder_pass']
+  openstack_folsom_cinder_user=pillar['openstack_folsom_cinder_user']
+  openstack_folsom_cinder_pass=pillar['openstack_folsom_cinder_pass']
 
-  saltmine_openstack_keystone_service_token=pillar['saltmine_openstack_keystone_service_token']
-  saltmine_openstack_keystone_service_endpoint=pillar['saltmine_openstack_keystone_service_endpoint']
-  saltmine_openstack_keystone_service_tenant_name=pillar['saltmine_openstack_keystone_service_tenant_name']
-  saltmine_openstack_keystone_auth_port=pillar['saltmine_openstack_keystone_auth_port']
-  saltmine_openstack_keystone_ip=pillar['saltmine_openstack_keystone_ip']
-  saltmine_openstack_keystone_ext_ip=pillar['saltmine_openstack_keystone_ext_ip']
+  openstack_folsom_keystone_service_token=pillar['openstack_folsom_keystone_service_token']
+  openstack_folsom_keystone_service_endpoint=pillar['openstack_folsom_keystone_service_endpoint']
+  openstack_folsom_keystone_service_tenant_name=pillar['openstack_folsom_keystone_service_tenant_name']
+  openstack_folsom_keystone_auth_port=pillar['openstack_folsom_keystone_auth_port']
+  openstack_folsom_keystone_ip=pillar['openstack_folsom_keystone_ip']
+  openstack_folsom_keystone_ext_ip=pillar['openstack_folsom_keystone_ext_ip']
 
-  saltmine_openstack_quantum_user=pillar['saltmine_openstack_quantum_user']
-  saltmine_openstack_quantum_pass=pillar['saltmine_openstack_quantum_pass']
+  openstack_folsom_quantum_user=pillar['openstack_folsom_quantum_user']
+  openstack_folsom_quantum_pass=pillar['openstack_folsom_quantum_pass']
 
 %>
 
@@ -37,9 +37,9 @@ openstack-cinder-db-create:
 openstack-cinder-db-init:
   cmd.run:
     - name: |
-        mysql -u root -e "GRANT ALL ON cinder.* TO '${saltmine_openstack_cinder_user}'@'%' IDENTIFIED BY '${saltmine_openstack_cinder_pass}';"
+        mysql -u root -e "GRANT ALL ON cinder.* TO '${openstack_folsom_cinder_user}'@'%' IDENTIFIED BY '${openstack_folsom_cinder_pass}';"
     - unless: |
-        echo '' | mysql cinder -u ${saltmine_openstack_cinder_user} -h 0.0.0.0 --password=${saltmine_openstack_cinder_pass}
+        echo '' | mysql cinder -u ${openstack_folsom_cinder_user} -h 0.0.0.0 --password=${openstack_folsom_cinder_pass}
 
 openstack-cinder-db-sync:
   cmd.wait:
@@ -77,14 +77,14 @@ openstack-cinder-api-paste-ini:
     - name: /etc/cinder/api-paste.ini
     - source: salt://saltmine/files/openstack/cinder-api-paste.ini
     - defaults:
-        saltmine_openstack_cinder_user: ${saltmine_openstack_cinder_user}
-        saltmine_openstack_cinder_pass: ${saltmine_openstack_cinder_pass}
-        saltmine_openstack_keystone_ip: ${saltmine_openstack_keystone_ip}
-        saltmine_openstack_keystone_service_tenant_name: ${saltmine_openstack_keystone_service_tenant_name}
-        saltmine_openstack_keystone_auth_port: ${saltmine_openstack_keystone_auth_port}
-        saltmine_openstack_keystone_ext_ip: ${saltmine_openstack_keystone_ext_ip}
-        saltmine_openstack_quantum_user: ${saltmine_openstack_quantum_user}
-        saltmine_openstack_quantum_pass: ${saltmine_openstack_quantum_pass}
+        openstack_folsom_cinder_user: ${openstack_folsom_cinder_user}
+        openstack_folsom_cinder_pass: ${openstack_folsom_cinder_pass}
+        openstack_folsom_keystone_ip: ${openstack_folsom_keystone_ip}
+        openstack_folsom_keystone_service_tenant_name: ${openstack_folsom_keystone_service_tenant_name}
+        openstack_folsom_keystone_auth_port: ${openstack_folsom_keystone_auth_port}
+        openstack_folsom_keystone_ext_ip: ${openstack_folsom_keystone_ext_ip}
+        openstack_folsom_quantum_user: ${openstack_folsom_quantum_user}
+        openstack_folsom_quantum_pass: ${openstack_folsom_quantum_pass}
     - template: mako
     - require:
       - pkg: cinder-pkgs
@@ -96,14 +96,14 @@ openstack-cinder-conf:
     - name: /etc/cinder/cinder.conf
     - source: salt://saltmine/files/openstack/cinder.conf
     - defaults:
-        saltmine_openstack_cinder_user: ${saltmine_openstack_cinder_user}
-        saltmine_openstack_cinder_pass: ${saltmine_openstack_cinder_pass}
-        saltmine_openstack_keystone_ip: ${saltmine_openstack_keystone_ip}
-        saltmine_openstack_keystone_service_tenant_name: ${saltmine_openstack_keystone_service_tenant_name}
-        saltmine_openstack_keystone_auth_port: ${saltmine_openstack_keystone_auth_port}
-        saltmine_openstack_keystone_ext_ip: ${saltmine_openstack_keystone_ext_ip}
-        saltmine_openstack_quantum_user: ${saltmine_openstack_quantum_user}
-        saltmine_openstack_quantum_pass: ${saltmine_openstack_quantum_pass}
+        openstack_folsom_cinder_user: ${openstack_folsom_cinder_user}
+        openstack_folsom_cinder_pass: ${openstack_folsom_cinder_pass}
+        openstack_folsom_keystone_ip: ${openstack_folsom_keystone_ip}
+        openstack_folsom_keystone_service_tenant_name: ${openstack_folsom_keystone_service_tenant_name}
+        openstack_folsom_keystone_auth_port: ${openstack_folsom_keystone_auth_port}
+        openstack_folsom_keystone_ext_ip: ${openstack_folsom_keystone_ext_ip}
+        openstack_folsom_quantum_user: ${openstack_folsom_quantum_user}
+        openstack_folsom_quantum_pass: ${openstack_folsom_quantum_pass}
     - template: mako
     - require:
       - pkg: cinder-pkgs
