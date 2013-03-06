@@ -1,5 +1,8 @@
 #!mako|yaml
 
+include:
+  - openstack-folsom.common.openvswitch
+
 #----------------------------
 # Install Packages
 #----------------------------

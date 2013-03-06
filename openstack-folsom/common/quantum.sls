@@ -44,6 +44,8 @@ openstack-quantum-openvswitch-pkg:
       - openstack-quantum-openvswitch
     - require:
       - pkg: openstack-quantum-pkg
+      - pkg: openvswitch-userspace-pkg
+      - pkg: openvswitch-kernel-pkg
 
 # only install database if we're on the control node
 % if 'openstack-control' in grains['roles']:

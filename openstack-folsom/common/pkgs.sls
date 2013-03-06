@@ -1,6 +1,5 @@
 #!mako|yaml
 
-
 % if pillar['openstack_folsom_source'] == 'internet':
 
 epel-repo:
