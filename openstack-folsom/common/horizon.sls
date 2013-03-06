@@ -34,15 +34,11 @@ openstack-dashboard-pkg:
   pkg.installed:
     - names: 
       - openstack-dashboard
-    - require: 
-      - pkg: epel-repo
 
 memcached-pkg:
   pkg.installed:
     - names: 
       - memcached
-    - require: 
-      - pkg: epel-repo
 
 memcached-service:
   service:

@@ -7,13 +7,30 @@ epel-repo:
   pkg.installed:
     - name: epel-release
     - sources:
-      - epel-release: 'http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm'
+      - epel-release: <% pillar['repo-epel-release'] %>
+    - require_in:
+      - pkg: openstack-glance-pkg
+      - pkg: rabbitmq-server-pkg
+      - pkg: openstack-keystone-pkg
+      - pkg: openstack-nova-server-pkg
+      - pkg: openstack-dashboard-pkg
+      - pkg: memcached-pkg
+      - pkg: openvswitch-deps-pkg
+      - pkg: openstack-quantum-pkg
 
 percona-repo:
   pkg.installed:
     - name: percona
     - sources:
-      - percona-release: 'http://www.percona.com/downloads/percona-release/percona-release-0.0-1.x86_64.rpm'
-      - percona-testing: 'http://repo.percona.com/testing/centos/6/os/noarch/percona-testing-0.0-1.noarch.rpm'
+      - percona-release: <% pillar['repo-percona-release'] %>
+      - percona-testing: <% pillar['repo-percona-testing'] %>
+
+ius-repo:
+  pkg.installed:
+    - name: ius-release
+    - sources:
+      - ius-release: <% pillar['repo-ius-release'] %>
+    - require_in:
+      - pkg: mysql-pkg
 
 % endif

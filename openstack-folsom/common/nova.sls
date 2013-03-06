@@ -41,8 +41,6 @@ openstack-nova-server-pkg:
       - openstack-nova-scheduler
       - openstack-nova-novncproxy
       - novnc
-    - require: 
-      - pkg: epel-repo
 
 #http://docs.saltstack.org/en/latest/ref/states/all/salt.states.user.html
 #https://lists.launchpad.net/openstack/msg20762.html

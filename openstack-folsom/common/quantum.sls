@@ -37,15 +37,12 @@ openstack-quantum-pkg:
   pkg.installed:
     - names: 
       - openstack-quantum
-    - require: 
-      - pkg: epel-repo
 
 openstack-quantum-openvswitch-pkg:
   pkg.installed:
     - names: 
       - openstack-quantum-openvswitch
-    - require: 
-      - pkg: epel-repo
+    - require:
       - pkg: openstack-quantum-pkg
 
 # only install database if we're on the control node

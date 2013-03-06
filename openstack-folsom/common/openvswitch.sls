@@ -30,8 +30,6 @@ openvswitch-deps-pkg:
       - redhat-rpm-config
       - crash-devel
       - crash
-    - require: 
-      - pkg: epel-repo
 
 #---------------------------
 # Create rpmbuild directory

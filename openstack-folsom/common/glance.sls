@@ -29,8 +29,6 @@ openstack-glance-pkg:
   pkg.installed:
     - names: 
       - openstack-glance
-    - require: 
-      - pkg: epel-repo
 
 openstack-glance-db-create:
   cmd.run:

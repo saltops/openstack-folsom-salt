@@ -28,8 +28,6 @@ mysql-pkg:
   pkg.installed:
     - names: 
       - mysql55-server
-    - require: 
-      - pkg: ius-repo
 
 python-mysqldb-pkg:
   pkg.installed:
@@ -38,7 +36,6 @@ python-mysqldb-pkg:
 # on Ubuntu
 #      - python-mysqldb
     - require: 
-      - pkg: ius-repo
       - pkg: mysql-pkg
 
 mysql-service:
@@ -53,8 +50,6 @@ rabbitmq-server-pkg:
   pkg.installed:
     - names: 
       - rabbitmq-server
-    - require: 
-      - pkg: epel-repo
 
 rabbitmq-server-service:
   service:
@@ -63,14 +58,12 @@ rabbitmq-server-service:
     - names: 
       - rabbitmq-server
     - require: 
-      - pkg: epel-repo
+      - pkg: rabbitmq-server-pkg
 
 openstack-keystone-pkg:
   pkg.installed:
     - names:
       - openstack-keystone 
-    - require:
-      - pkg: epel-repo
 
 keystone-db-create:
   cmd.run:
