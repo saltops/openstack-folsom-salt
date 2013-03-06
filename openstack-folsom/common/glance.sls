@@ -4,6 +4,7 @@
 
 include:
   - openstack-folsom.common.pkgs
+  - openstack-folsom.common.keystone
 
 <%
   openstack_folsom_mysql_root_username=pillar['openstack_folsom_mysql_root_username']
