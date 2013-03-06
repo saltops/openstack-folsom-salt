@@ -92,6 +92,22 @@ keystone-db-init:
     - unless: |
         echo '' | mysql keystone -u ${openstack_folsom_keystone_user} -h 0.0.0.0 --password=${openstack_folsom_keystone_pass}
 
+keystone-conf:
+  file.managed:
+    - name: /etc/keystone/keystone.conf
+    - source: salt://openstack-folsom/files/keystone.conf
+    - defaults:
+        openstack_folsom_keystone_user: ${openstack_folsom_keystone_user}
+        openstack_folsom_keystone_pass: ${openstack_folsom_keystone_pass}
+        openstack_folsom_keystone_ip: ${openstack_folsom_keystone_ip}
+        openstack_folsom_keystone_service_tenant_name: ${openstack_folsom_keystone_service_tenant_name}
+        openstack_folsom_keystone_ext_ip: ${openstack_folsom_keystone_ext_ip}
+    - template: mako
+    - require:
+      - pkg: openstack-keystone-pkg
+    - watch_in:
+      - service: openstack-keystone-service
+
 openstack-keystone-service:
   service:
     - running
@@ -99,19 +115,6 @@ openstack-keystone-service:
     - name: openstack-keystone
     - require:
       - pkg: openstack-keystone-pkg
-
-keystone-conf:
-  file.sed:
-    - name: /etc/keystone/keystone.conf
-    - before: |
-        mysql:.*
-    - after: | 
-        mysql://${openstack_folsom_keystone_user}:${openstack_folsom_keystone_pass}@${openstack_folsom_keystone_ip}/keystone
-    - limit: ^connection\ =
-    - require:
-      - pkg: openstack-keystone-pkg
-    - watch_in:
-      - service: openstack-keystone-service
 
 keystone-db-sync:
   cmd.wait:
@@ -137,6 +140,8 @@ keystone-basic-script:
     - name: sh /root/keystone-basic.sh
     - watch:
       - cmd: keystone-db-sync
+    - require:
+      - file: keystone-basic-script
 
 keystone-endpoints-script:
   file.managed:
@@ -154,6 +159,8 @@ keystone-endpoints-script:
     - name: sh /root/keystone-endpoints-basic.sh
     - watch:
       - cmd: keystone-basic-script
+    - require:
+      - file: keystone-endpoints-script
 
 keystone-creds-script:
   file.managed:
@@ -171,3 +178,5 @@ keystone-creds-script:
     - name: source /root/keystonerc
     - watch:
       - cmd: keystone-endpoints-script
+    - require:
+      - file: keystone-creds-script
