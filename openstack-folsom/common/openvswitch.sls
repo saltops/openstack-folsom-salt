@@ -142,7 +142,7 @@ openvswitch-copy-gzip:
     - name: |
         cp -f ${openvswitch_source_directory}/${openvswitch_release_full}.tar2.gz ${openvswitch_source_directory}/${openvswitch_release_full}.tar.gz
     - unless: |
-        [[ `stat -c %s ${openvswitch_source_directory}/${openvswitch_release_full}.tar2.gz` -eq `stat -c %s ${openvswitch_source_directory}/${openvswitch_release_full}.tar.gz`]] && echo 'files are equal'
+        [[ `stat -c %s ${openvswitch_source_directory}/${openvswitch_release_full}.tar2.gz` -eq `stat -c %s ${openvswitch_source_directory}/${openvswitch_release_full}.tar.gz` ]] && echo 'files are equal'
     - cwd: ${home_directory}
     - require:
       - cmd: openvswitch-fixtar
