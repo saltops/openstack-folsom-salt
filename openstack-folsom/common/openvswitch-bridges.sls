@@ -5,7 +5,9 @@ interface1_device=salt['cmd.run']('for i in 1 2 3; do ifconfig eth$i 2>&1 | grep
 interface2_device=salt['cmd.run']('for i in 1 2 3; do ifconfig eth$i 2>&1 | grep '+pillar['interface2_range']+' > /dev/null && echo eth$i; done;')
 interface3_device=salt['cmd.run']('for i in 1 2 3; do ifconfig eth$i 2>&1 | grep '+pillar['interface3_range']+' > /dev/null && echo eth$i; done;')
 
-#for i in 1 2 3; do ifconfig eth$i 2>&1 | grep 100.10.10.53 > /dev/null && echo eth$i; done;
+# Notes:
+# for i in 1 2 3; do ifconfig eth$i 2>&1 | grep 100.10.10 > /dev/null && echo eth$i; done;
+
 %>
 
 openstack-openvswitch-service:
