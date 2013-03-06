@@ -2,6 +2,7 @@
 
 include:
   - openstack-folsom.common.openvswitch
+  - openstack-folsom.common.quantum
 
 #----------------------------
 # Install Packages

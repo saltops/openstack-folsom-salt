@@ -2,6 +2,9 @@
 
 # openstack-folsom cinder setup
 
+include:
+  - openstack-folsom.common.quantum
+
 <%
   openstack_folsom_cinder_user=pillar['openstack_folsom_cinder_user']
   openstack_folsom_cinder_pass=pillar['openstack_folsom_cinder_pass']

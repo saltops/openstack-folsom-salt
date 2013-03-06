@@ -1,5 +1,8 @@
 #!mako|yaml
 
+include:
+  - openstack-folsom.common.quantum
+
 <%
 interface1_device=salt['cmd.run']('for i in 1 2 3; do ifconfig eth$i 2>&1 | grep '+pillar['interface1_range']+' > /dev/null && echo eth$i; done;')
 interface2_device=salt['cmd.run']('for i in 1 2 3; do ifconfig eth$i 2>&1 | grep '+pillar['interface2_range']+' > /dev/null && echo eth$i; done;')
@@ -10,6 +13,16 @@ interface3_device=salt['cmd.run']('for i in 1 2 3; do ifconfig eth$i 2>&1 | grep
 
 %>
 
+#https://sites.google.com/site/routeflow/my-page
+linux-bridge-disable:
+  cmd.run:
+    - name: rmmod bridge
+    - unless: |
+        cat /proc/modules | grep bridge || echo 'bridge module not installed'
+    - require:
+      - pkg: openstack-quantum-openvswitch-pkg
+
+
 openstack-openvswitch-service:
   service:
     - running
@@ -17,6 +30,7 @@ openstack-openvswitch-service:
     - name: openvswitch
     - require:
       - pkg: openstack-quantum-openvswitch-pkg
+      - cmd: linux-bridge-disable
 
 openstack-node-br-int-bridge:
   cmd.run:
