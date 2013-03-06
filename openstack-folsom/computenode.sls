@@ -5,7 +5,7 @@
 include:
   - openstack-folsom.common.openstackcommon
   - openstack-folsom.common.quantum
-  - openstack-folsom.common.openvswitch-bridges-computenode
+  - openstack-folsom.common.openvswitch-bridges
   - openstack-folsom.common.nova-compute
   - openstack-folsom.common.cinder
 

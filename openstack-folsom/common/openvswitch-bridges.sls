@@ -8,14 +8,14 @@ openstack-openvswitch-service:
     - require:
       - pkg: openstack-quantum-openvswitch-pkg
 
-openstack-networknode-br-int-bridge:
+openstack-node-br-int-bridge:
   cmd.run:
     - name: ovs-vsctl add-br br-int
     - unless: ovs-vsctl list-br | grep 'br-int'
     - require:
       - service: openstack-openvswitch-service
 
-openstack-networknode-br-eth1-bridge:
+openstack-node-br-eth1-bridge:
   cmd.run:
     - name: ovs-vsctl add-br br-eth1
     - unless: ovs-vsctl list-br | grep 'br-eth1'
@@ -23,30 +23,33 @@ openstack-networknode-br-eth1-bridge:
       - service: openstack-openvswitch-service
 
 % for env in ['eth1']:
-openstack-networknode-br-eth1-port:
+openstack-node-br-eth1-port:
   cmd.run:
     - name: ovs-vsctl add-port br-eth1 ${env}
     - unless: |
         [[ `ovs-vsctl list-ports br-eth1 2> /dev/null | grep '^${env}$'` == '${env}' ]] && echo '${env} port exists'
     - require:
       - service: openstack-openvswitch-service
-      - cmd: openstack-networknode-br-eth1-bridge
+      - cmd: openstack-node-br-eth1-bridge
 % endfor
 
-openstack-networknode-br-ex-bridge:
+% if ('openstack-network' in grains['roles']):
+openstack-node-br-ex-bridge:
   cmd.run:
     - name: ovs-vsctl add-br br-ex
     - unless: ovs-vsctl list-br | grep 'br-ex'
     - require:
       - service: openstack-openvswitch-service
 
-% for env in ['eth2']:
-openstack-networknode-br-ex-port:
+  % for env in ['eth2']:
+openstack-node-br-ex-port:
   cmd.run:
     - name: ovs-vsctl add-port br-ex ${env}
     - unless: |
         [[ `ovs-vsctl list-ports br-ex 2> /dev/null | grep '^${env}$'` == '${env}' ]] && echo '${env} port exists'
     - require:
       - service: openstack-openvswitch-service
-      - cmd: openstack-networknode-br-ex-bridge
-% endfor
+      - cmd: openstack-node-br-ex-bridge
+  % endfor
+
+% endif

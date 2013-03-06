@@ -5,7 +5,7 @@
 include:
   - openstack-folsom.common.openstackcommon
   - openstack-folsom.common.quantum
-  - openstack-folsom.common.openvswitch-bridges-networknode
+  - openstack-folsom.common.openvswitch-bridges
 
 <%
   openstack_folsom_mysql_root_username=pillar['openstack_folsom_mysql_root_username']
