@@ -4,7 +4,7 @@
 
 include:
   - openstack-folsom.common.openstackcommon
-  - openstack-folsom.common.pkgs
+  # - openstack-folsom.common.pkgs
   - openstack-folsom.common.openvswitch
 
 <%
@@ -83,7 +83,7 @@ openstack-quantum-db-init:
 openstack-quantum-ovs_quantum_plugin-ini:
   file.managed:
     - name: /etc/quantum/plugins/openvswitch/ovs_quantum_plugin.ini
-    - source: salt://saltmine/files/openstack/ovs_quantum_plugin.ini
+    - source: salt://openstack-folsom/files/ovs_quantum_plugin.ini
     - defaults:
         openstack_folsom_quantum_user: ${openstack_folsom_quantum_user}
         openstack_folsom_quantum_pass: ${openstack_folsom_quantum_pass}
@@ -96,7 +96,7 @@ openstack-quantum-ovs_quantum_plugin-ini:
 openstack-quantum-api-paste-ini:
   file.managed:
     - name: /etc/quantum/api-paste.ini
-    - source: salt://saltmine/files/openstack/quantum-api-paste.ini
+    - source: salt://openstack-folsom/files/quantum-api-paste.ini
     - defaults:
         openstack_folsom_quantum_user: ${openstack_folsom_quantum_user}
         openstack_folsom_quantum_pass: ${openstack_folsom_quantum_pass}

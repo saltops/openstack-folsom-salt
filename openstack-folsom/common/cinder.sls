@@ -75,7 +75,7 @@ cinder-pkgs:
 openstack-cinder-api-paste-ini:
   file.managed:
     - name: /etc/cinder/api-paste.ini
-    - source: salt://saltmine/files/openstack/cinder-api-paste.ini
+    - source: salt://openstack-folsom/files/cinder-api-paste.ini
     - defaults:
         openstack_folsom_cinder_user: ${openstack_folsom_cinder_user}
         openstack_folsom_cinder_pass: ${openstack_folsom_cinder_pass}
@@ -94,7 +94,7 @@ openstack-cinder-api-paste-ini:
 openstack-cinder-conf:
   file.managed:
     - name: /etc/cinder/cinder.conf
-    - source: salt://saltmine/files/openstack/cinder.conf
+    - source: salt://openstack-folsom/files/cinder.conf
     - defaults:
         openstack_folsom_cinder_user: ${openstack_folsom_cinder_user}
         openstack_folsom_cinder_pass: ${openstack_folsom_cinder_pass}

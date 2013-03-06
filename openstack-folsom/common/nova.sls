@@ -95,7 +95,7 @@ openstack-nova-db-sync:
 openstack-nova-api-paste-ini:
   file.managed:
     - name: /etc/nova/api-paste.ini
-    - source: salt://saltmine/files/openstack/nova-api-paste.ini
+    - source: salt://openstack-folsom/files/nova-api-paste.ini
     - defaults:
         openstack_folsom_nova_user: ${openstack_folsom_nova_user}
         openstack_folsom_nova_pass: ${openstack_folsom_nova_pass}
@@ -111,7 +111,7 @@ openstack-nova-api-paste-ini:
 openstack-nova-conf:
   file.managed:
     - name: /etc/nova/nova.conf
-    - source: salt://saltmine/files/openstack/nova.conf
+    - source: salt://openstack-folsom/files/nova.conf
     - defaults:
         openstack_folsom_nova_user: ${openstack_folsom_nova_user}
         openstack_folsom_nova_pass: ${openstack_folsom_nova_pass}

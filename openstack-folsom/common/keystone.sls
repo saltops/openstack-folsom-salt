@@ -114,7 +114,7 @@ keystone-db-sync:
 keystone-basic-script:
   file.managed:
     - name: /root/keystone-basic.sh
-    - source: salt://saltmine/files/openstack/keystone-basic.sh
+    - source: salt://openstack-folsom/files/keystone-basic.sh
     - template: mako
     - defaults:
         openstack_folsom_keystone_ip: ${openstack_folsom_keystone_ip}
@@ -131,7 +131,7 @@ keystone-basic-script:
 keystone-endpoints-script:
   file.managed:
     - name: /root/keystone-endpoints-basic.sh
-    - source: salt://saltmine/files/openstack/keystone-endpoints-basic.sh
+    - source: salt://openstack-folsom/files/keystone-endpoints-basic.sh
     - template: mako
     - defaults:
         openstack_folsom_keystone_ip: ${openstack_folsom_keystone_ip}
@@ -148,7 +148,7 @@ keystone-endpoints-script:
 keystone-creds-script:
   file.managed:
     - name: /root/keystonerc
-    - source: salt://saltmine/files/openstack/keystonerc
+    - source: salt://openstack-folsom/files/keystonerc
     - template: mako
     - defaults:
         openstack_folsom_OS_USERNAME: ${openstack_folsom_OS_USERNAME}

@@ -83,7 +83,7 @@ openstack-virsh-default-undefine:
 openstack-qemu-conf:
   file.managed:
     - name: /etc/libvirt/qemu.conf
-    - source: salt://saltmine/files/openstack/qemu.conf
+    - source: salt://openstack-folsom/files/qemu.conf
     - require:
       - pkg: vm-pkgs
     - watch_in:
@@ -92,7 +92,7 @@ openstack-qemu-conf:
 openstack-libvirtd-conf:
   file.managed:
     - name: /etc/libvirt/libvirtd.conf
-    - source: salt://saltmine/files/openstack/libvirtd.conf
+    - source: salt://openstack-folsom/files/libvirtd.conf
     - require:
       - pkg: vm-pkgs
     - watch_in:
@@ -101,7 +101,7 @@ openstack-libvirtd-conf:
 openstack-libvirtd-file:
   file.managed:
     - name: /etc/init.d/libvirtd
-    - source: salt://saltmine/files/openstack/libvirtd
+    - source: salt://openstack-folsom/files/libvirtd
     - user: root
     - group: root
     - mode: 755
