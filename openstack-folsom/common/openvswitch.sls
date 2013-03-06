@@ -12,7 +12,7 @@ openvswitch_file_location=pillar['openvswitch-file-location']
 
 #-----------------------------------------------------------
 # Openvswitch kernel and userspace rpm build/install script
-# Compatible with RHEL 6.3
+# Compatible with RHEL/CentOS 6.3
 #-----------------------------------------------------------
 
 #http://openvswitch.org/download/
@@ -59,18 +59,19 @@ rpmbuild-${directory}-directory:
 #http://www.cyberciti.biz/faq/bash-csh-sh-check-and-file-file-size/
 openvswitch-download-temp-tarball:
   cmd.run:
-    - name: curl ${openvswitch_file_location}/${openvswitch_filename} > ~/${openvswitch_filename}
+    - name: |
+        curl ${openvswitch_file_location}/${openvswitch_filename} > ~/${openvswitch_filename}
     - unless: |
         [[ `stat -c %s ${home_directory}/${openvswitch_filename}` -gt 2150000 ]] && echo 'big file exists'
     - require:
       - pkg: openvswitch-deps-pkg
-  file.managed:
-    - name: ${home_directory}/${openvswitch_filename}
 
 openvswitch-unzip-tarball:
-  cmd.wait:
+  cmd.run:
     - name: tar -xvf ${home_directory}/${openvswitch_filename}
-    - watch:
+    - unless: |
+        [[ `du -s /root/openvswitch-1.7.3 | cut -d$'\t'  -f1 2>&1` -gt 14000 ]] && echo 'directory is big'
+    - require:
       - cmd: openvswitch-download-temp-tarball
 
 openvswitch-download-source-tarball:
@@ -81,8 +82,6 @@ openvswitch-download-source-tarball:
         [[ `stat -c %s ${openvswitch_source_directory}/${openvswitch_filename}` -gt 2150000 ]] && echo 'big file exists'
     - require:
       - pkg: openvswitch-deps-pkg
-  file.managed:
-    - name: ${openvswitch_source_directory}/${openvswitch_filename}
 
 #---------------------------
 # Patch source tarball
@@ -98,11 +97,9 @@ openvswitch-fix1:
         grep -i '\/\/static inline struct page \*skb_frag_page' skbuff.h && echo 'edit already exists'
     - cwd: ${openvswitch_temp_directory}/datapath/linux/compat/include/linux/
     - require:
-      - file: openvswitch-fix1
-      - file: openvswitch-download-temp-tarball
-      - file: openvswitch-download-source-tarball
-  file.managed:
-    - name: ${openvswitch_temp_directory}/datapath/linux/compat/include/linux/skbuff.h
+      - cmd: openvswitch-download-temp-tarball
+      - cmd: openvswitch-download-source-tarball
+      - cmd: openvswitch-unzip-tarball
 
 # copy out a tar from the tar.gz file
 openvswitch-sourcetar-copy:
@@ -110,21 +107,45 @@ openvswitch-sourcetar-copy:
     - name: |
         gunzip -c ${openvswitch_source_directory}/${openvswitch_release_full}.tar.gz > ${openvswitch_source_directory}/${openvswitch_release_full}.tar
     - unless: |
-        [[ -f ${openvswitch_source_directory}/${openvswitch_release_full}.tar && -f ${openvswitch_source_directory}/${openvswitch_release_full}.tar.gz ]] && echo 'files exist'
+        [[ `stat -c %s ${openvswitch_source_directory}/${openvswitch_release_full}.tar.gz` -gt 2150000 ]] && [[ `stat -c %s ${openvswitch_source_directory}/${openvswitch_release_full}.tar` -gt 13680000 ]] && echo 'both big files exist'
     - require:
-      - file: openvswitch-download-source-tarball
+      - cmd: openvswitch-fix1
 
 # add the new patched file to the tar if only one skbuff.h exists in the tar
 openvswitch-fixtar:
   cmd.run:
     - name: |
-        tar -rf ${openvswitch_source_directory}/${openvswitch_release_full}.tar ./${openvswitch_release_full}/datapath/linux/compat/include/linux/skbuff.h && gzip -c ${openvswitch_source_directory}/openvswitch-1.7.3.tar > ${openvswitch_source_directory}/${openvswitch_release_full}.tar.gz
+        tar -rf ${openvswitch_source_directory}/${openvswitch_release_full}.tar ./${openvswitch_release_full}/datapath/linux/compat/include/linux/skbuff.h
     - unless: |
         [[ `tar --list -f ${openvswitch_source_directory}/${openvswitch_release_full}.tar | grep skbuff.h | wc -l` -gt 1 ]] && echo 'more than one'
     - cwd: ${home_directory}
     - require:
-      - file: openvswitch-download-source-tarball
       - cmd: openvswitch-fix1
+      - cmd: openvswitch-sourcetar-copy
+
+# gzip new tar
+openvswitch-gzip-tar:
+  cmd.wait:
+    - name: |
+        gzip -c ${openvswitch_source_directory}/openvswitch-1.7.3.tar > ${openvswitch_source_directory}/${openvswitch_release_full}.tar2.gz && [[ `stat -c %s ${openvswitch_source_directory}/${openvswitch_release_full}.tar2.gz` -gt 2150000 ]] && echo 'big file exists'
+    - unless: |
+        [[ `stat -c %s ${openvswitch_source_directory}/${openvswitch_release_full}.tar2.gz` -gt 2150000 ]] && echo 'big file exists'
+    - cwd: ${home_directory}
+    - watch:
+      - cmd: openvswitch-fixtar
+    - require_in:
+      - cmd: openvswitch-copy-gzip
+
+# compare to new tar to size of old tar. if same, then good! if not, copy new tar over old tar
+openvswitch-copy-gzip:
+  cmd.run:
+    - name: |
+        cp -f ${openvswitch_source_directory}/${openvswitch_release_full}.tar2.gz ${openvswitch_source_directory}/${openvswitch_release_full}.tar.gz
+    - unless: |
+        [[ `stat -c %s ${openvswitch_source_directory}/${openvswitch_release_full}.tar2.gz` -eq `stat -c %s ${openvswitch_source_directory}/${openvswitch_release_full}.tar.gz`]] && echo 'files are equal'
+    - cwd: ${home_directory}
+    - require:
+      - cmd: openvswitch-fixtar
 
 #------------------
 # Build the RPMS
@@ -148,8 +169,8 @@ openvswitch-build-baserpms:
         [[ `stat -c %s ${home_directory}/rpmbuild/RPMS/x86_64/${openvswitch_release_full}-1.x86_64.rpm` -gt 1000000 ]] && echo 'rpm exists'
     - cwd: ${openvswitch_temp_directory}
     - require:
-      - file: openvswitch-download-source-tarball
-      - file: openvswitch-download-temp-tarball
+      - cmd: openvswitch-download-source-tarball
+      - cmd: openvswitch-download-temp-tarball
 
 #------------------
 # Install the RPMS
@@ -160,23 +181,17 @@ openvswitch-kernel-pkg:
     - name: kmod-openvswitch
     - sources:
       - kmod-openvswitch: '${home_directory}/rpmbuild/RPMS/x86_64/kmod-${openvswitch_release_full}-1.el6.x86_64.rpm'
-    - require_in:
-      - pkg: openstack-quantum-openvswitch-pkg
     - require:
-      - file: openvswitch-kernel-pkg
-  file.managed:
-    - name: '${home_directory}/rpmbuild/RPMS/x86_64/kmod-${openvswitch_release_full}-1.el6.x86_64.rpm'
+      - cmd: openvswitch-build-kernelrpm
 
 openvswitch-userspace-pkg:
   pkg.installed:
     - name: openvswitch
     - sources:
       - openvswitch: '${home_directory}/rpmbuild/RPMS/x86_64/${openvswitch_release_full}-1.x86_64.rpm'
-    - require_in:
-      - pkg: openstack-quantum-openvswitch-pkg
     - require:
       - pkg: openvswitch-kernel-pkg
-
+      - cmd: openvswitch-build-baserpms
 
 #--------------
 # Build Notes
