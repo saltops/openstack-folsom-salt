@@ -38,6 +38,16 @@ openstack-quantum-pkg:
     - names: 
       - openstack-quantum
 
+openstack-quantum-initd:
+  file.managed:
+    - name: /etc/init.d/quantum-server
+    - source: salt://openstack-folsom/files/quantum-server
+    - user: root
+    - group: root
+    - mode: 755
+    - require:
+      - pkg: openstack-quantum-pkg
+
 openstack-quantum-openvswitch-pkg:
   pkg.installed:
     - names: 
@@ -60,6 +70,7 @@ openstack-quantum-service:
     - watch:
       - file: openstack-quantum-api-paste-ini
       - file: openstack-quantum-ovs_quantum_plugin-ini
+      - file: openstack-quantum-initd
 
 openstack-quantum-db-create:
   cmd.run:
@@ -78,6 +89,25 @@ openstack-quantum-db-init:
     - unless: |
         echo '' | mysql quantum -u ${openstack_folsom_quantum_user} -h 0.0.0.0 --password=${openstack_folsom_quantum_pass}
 
+quantum-openvswitch-agent-service:
+  service:
+    - running
+    - enable: True
+    - name: quantum-openvswitch-agent
+    - require:
+      - pkg: openstack-quantum-openvswitch-pkg
+
+openstack-quantum-conf:
+  file.managed:
+    - name: /etc/quantum/quantum.conf
+    - source: salt://openstack-folsom/files/quantum.conf
+    - defaults:
+        openstack_folsom_keystone_ip: ${openstack_folsom_keystone_ip}
+    - template: mako
+    - require:
+      - pkg: openstack-quantum-openvswitch-pkg
+    - watch_in:
+      - service: quantum-openvswitch-agent-service
 % endif
 
 openstack-quantum-ovs_quantum_plugin-ini:
