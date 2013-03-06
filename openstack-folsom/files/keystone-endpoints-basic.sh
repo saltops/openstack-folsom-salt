@@ -11,19 +11,19 @@
 #
 
 # Host address
-HOST_IP=${saltmine_openstack_keystone_ip}
-EXT_HOST_IP=${saltmine_openstack_keystone_ext_ip}
+HOST_IP=${openstack_folsom_keystone_ip}
+EXT_HOST_IP=${openstack_folsom_keystone_ext_ip}
 
 # MySQL definitions
-MYSQL_USER=${saltmine_openstack_keystone_user}
+MYSQL_USER=${openstack_folsom_keystone_user}
 MYSQL_DATABASE=keystone
 MYSQL_HOST=$HOST_IP
-MYSQL_PASSWORD=${saltmine_openstack_keystone_pass}
+MYSQL_PASSWORD=${openstack_folsom_keystone_pass}
 
 # Keystone definitions
 KEYSTONE_REGION=RegionOne
 export SERVICE_TOKEN=ADMIN
-export SERVICE_ENDPOINT="http://${saltmine_openstack_keystone_ip}:35357/v2.0"
+export SERVICE_ENDPOINT="http://${openstack_folsom_keystone_ip}:35357/v2.0"
 
 while getopts "u:D:p:m:K:R:E:T:vh" opt; do
   case $opt in

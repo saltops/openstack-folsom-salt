@@ -1,5 +1,5 @@
 #!/bin/bash
-export OS_USERNAME=${saltmine_openstack_OS_USERNAME}
-export OS_PASSWORD=${saltmine_openstack_OS_PASSWORD}
-export OS_TENANT_NAME=${saltmine_openstack_OS_TENANT_NAME}
-export OS_AUTH_URL="http://${saltmine_openstack_keystone_ext_ip}:5000/v2.0/"
+export OS_USERNAME=${openstack_folsom_OS_USERNAME}
+export OS_PASSWORD=${openstack_folsom_OS_PASSWORD}
+export OS_TENANT_NAME=${openstack_folsom_OS_TENANT_NAME}
+export OS_AUTH_URL="http://${openstack_folsom_keystone_ext_ip}:5000/v2.0/"
