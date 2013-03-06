@@ -7,7 +7,7 @@ epel-repo:
   pkg.installed:
     - name: epel-release
     - sources:
-      - epel-release: <% pillar['repo-epel-release'] %>
+      - epel-release: ${pillar['repo-epel-release']}
     - require_in:
       - pkg: openstack-glance-pkg
       - pkg: rabbitmq-server-pkg
@@ -22,14 +22,14 @@ percona-repo:
   pkg.installed:
     - name: percona
     - sources:
-      - percona-release: <% pillar['repo-percona-release'] %>
-      - percona-testing: <% pillar['repo-percona-testing'] %>
+      - percona-release: ${pillar['repo-percona-release']}
+      - percona-testing: ${pillar['repo-percona-testing']}
 
 ius-repo:
   pkg.installed:
     - name: ius-release
     - sources:
-      - ius-release: <% pillar['repo-ius-release'] %>
+      - ius-release: ${pillar['repo-ius-release']}
     - require_in:
       - pkg: mysql-pkg
 

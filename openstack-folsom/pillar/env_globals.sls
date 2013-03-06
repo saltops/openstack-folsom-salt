@@ -1,10 +1,12 @@
 ## OpenStack settings
 openstack_folsom_source: 'internet'
 
+# Sources
 repo-epel-release: 'http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm'
 repo-percona-release: 'http://www.percona.com/downloads/percona-release/percona-release-0.0-1.x86_64.rpm'
 repo-percona-testing: 'http://repo.percona.com/testing/centos/6/os/noarch/percona-testing-0.0-1.noarch.rpm'
 repo-ius-release: 'http://dl.iuscommunity.org/pub/ius/stable/Redhat/6/x86_64/ius-release-1.0-10.ius.el6.noarch.rpm'
+openvswitch-file-location: 'http://openvswitch.org/releases'
 
 # MySQL
 openstack_folsom_mysql_root_username: 'root'

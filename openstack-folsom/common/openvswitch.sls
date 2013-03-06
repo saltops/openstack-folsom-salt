@@ -7,7 +7,7 @@ home_directory='/root'
 openvswitch_source_directory=home_directory+'/rpmbuild/SOURCES'
 openvswitch_filename='openvswitch-'+openvswitch_release+'.tar.gz'
 openvswitch_temp_directory=home_directory+'/openvswitch-'+openvswitch_release
-
+openvswitch_file_location=pillar['openvswitch-file-location']
 %>
 
 #-----------------------------------------------------------
@@ -59,7 +59,7 @@ rpmbuild-${directory}-directory:
 #http://www.cyberciti.biz/faq/bash-csh-sh-check-and-file-file-size/
 openvswitch-download-temp-tarball:
   cmd.run:
-    - name: curl http://openvswitch.org/releases/${openvswitch_filename} > ~/${openvswitch_filename}
+    - name: curl ${openvswitch_file_location}/${openvswitch_filename} > ~/${openvswitch_filename}
     - unless: |
         [[ `stat -c %s ${home_directory}/${openvswitch_filename}` -gt 2150000 ]] && echo 'big file exists'
     - require:
@@ -76,7 +76,7 @@ openvswitch-unzip-tarball:
 openvswitch-download-source-tarball:
   cmd.run:
     - name: |
-        curl http://openvswitch.org/releases/${openvswitch_filename} > ${openvswitch_source_directory}/${openvswitch_filename}
+        curl ${openvswitch_file_location}/${openvswitch_filename} > ${openvswitch_source_directory}/${openvswitch_filename}
     - unless: |
         [[ `stat -c %s ${openvswitch_source_directory}/${openvswitch_filename}` -gt 2150000 ]] && echo 'big file exists'
     - require:
