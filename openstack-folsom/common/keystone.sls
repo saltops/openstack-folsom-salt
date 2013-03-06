@@ -28,6 +28,10 @@ mysql-pkg:
   pkg.installed:
     - names: 
       - mysql55-server
+% if pillar['openstack_folsom_source'] == 'internet':
+    - require:
+      - pkg: ius-repo
+% endif
 
 python-mysqldb-pkg:
   pkg.installed:
@@ -50,6 +54,10 @@ rabbitmq-server-pkg:
   pkg.installed:
     - names: 
       - rabbitmq-server
+% if pillar['openstack_folsom_source'] == 'internet':
+    - require:
+      - pkg: epel-repo
+% endif
 
 rabbitmq-server-service:
   service:
@@ -63,7 +71,9 @@ rabbitmq-server-service:
 openstack-keystone-pkg:
   pkg.installed:
     - names:
-      - openstack-keystone 
+      - openstack-keystone
+    - require:
+      - service: mysql-service
 
 keystone-db-create:
   cmd.run:
