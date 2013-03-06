@@ -59,7 +59,7 @@ quantum-dhcp-agent-service:
 openstack-quantum-l3_agent-ini:
   file.managed:
     - name: /etc/quantum/l3_agent.ini
-    - source: salt://saltmine/files/openstack/l3_agent.ini
+    - source: salt://openstack-folsom/files/l3_agent.ini
     - defaults:
         openstack_folsom_keystone_ip: ${openstack_folsom_keystone_ip}
         openstack_folsom_keystone_auth_port: ${openstack_folsom_keystone_auth_port}
@@ -77,7 +77,7 @@ openstack-quantum-l3_agent-ini:
 openstack-quantum-conf:
   file.managed:
     - name: /etc/quantum/quantum.conf
-    - source: salt://saltmine/files/openstack/quantum.conf
+    - source: salt://openstack-folsom/files/quantum.conf
     - defaults:
         openstack_folsom_keystone_ip: ${openstack_folsom_keystone_ip}
     - template: mako
