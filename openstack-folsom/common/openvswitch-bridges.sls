@@ -1,5 +1,13 @@
 #!mako|yaml
 
+<%
+interface1_device=salt['cmd.run']('for i in 1 2 3; do ifconfig eth$i 2>&1 | grep '+pillar['interface1_range']+' > /dev/null && echo eth$i; done;')
+interface2_device=salt['cmd.run']('for i in 1 2 3; do ifconfig eth$i 2>&1 | grep '+pillar['interface2_range']+' > /dev/null && echo eth$i; done;')
+interface3_device=salt['cmd.run']('for i in 1 2 3; do ifconfig eth$i 2>&1 | grep '+pillar['interface3_range']+' > /dev/null && echo eth$i; done;')
+
+#for i in 1 2 3; do ifconfig eth$i 2>&1 | grep 100.10.10.53 > /dev/null && echo eth$i; done;
+%>
+
 openstack-openvswitch-service:
   service:
     - running
@@ -22,7 +30,7 @@ openstack-node-br-eth1-bridge:
     - require:
       - service: openstack-openvswitch-service
 
-% for env in ['eth1']:
+% for env in [interface2_device]:
 openstack-node-br-eth1-port:
   cmd.run:
     - name: ovs-vsctl add-port br-eth1 ${env}
@@ -41,7 +49,7 @@ openstack-node-br-ex-bridge:
     - require:
       - service: openstack-openvswitch-service
 
-  % for env in ['eth2']:
+  % for env in [interface3_device]:
 openstack-node-br-ex-port:
   cmd.run:
     - name: ovs-vsctl add-port br-ex ${env}

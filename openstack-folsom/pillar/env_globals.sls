@@ -8,6 +8,11 @@ repo-percona-testing: 'http://repo.percona.com/testing/centos/6/os/noarch/percon
 repo-ius-release: 'http://dl.iuscommunity.org/pub/ius/stable/Redhat/6/x86_64/ius-release-1.0-10.ius.el6.noarch.rpm'
 openvswitch-file-location: 'http://openvswitch.org/releases'
 
+# Networks
+interface1_range: 100.10.10
+interface2_range: 100.20.20
+interface3_range: 192.168.100
+
 # MySQL
 openstack_folsom_mysql_root_username: 'root'
 openstack_folsom_mysql_root_password: 'test'
