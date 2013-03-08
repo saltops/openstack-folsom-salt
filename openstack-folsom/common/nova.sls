@@ -85,6 +85,7 @@ openstack-nova-db-init:
     - unless: |
         echo '' | mysql nova -u ${openstack_folsom_nova_user} -h 0.0.0.0 --password=${openstack_folsom_nova_pass}
 
+#TODO this should not be a 'wait'. create a test for it.
 openstack-nova-db-sync:
   cmd.wait:
     - name: nova-manage db sync
