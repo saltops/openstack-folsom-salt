@@ -38,6 +38,18 @@ openstack-quantum-pkg:
     - names: 
       - openstack-quantum
 
+quantum:
+  user.present:
+    - fullname: OpenStack Quantum Daemons
+    - shell: /sbin/nologin
+    - home: /var/lib/quantum
+    - uid: 164
+    - gid: 164
+    - groups:
+      - lock
+    - require:
+      - pkg: openstack-quantum-pkg
+
 openstack-quantum-initd:
   file.managed:
     - name: /etc/init.d/quantum-server

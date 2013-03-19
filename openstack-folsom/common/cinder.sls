@@ -69,6 +69,19 @@ cinder-pkgs:
     - require:
       - pkg: openstack-quantum-openvswitch-pkg
 
+
+cinder:
+  user.present:
+    - fullname: OpenStack Cinder Daemons
+    - shell: /sbin/nologin
+    - home: /var/lib/cinder
+    - uid: 165
+    - gid: 165
+    - groups:
+      - lock
+    - require:
+      - pkg: cinder-pkgs
+
 #----------------------------
 # Manage config files
 #----------------------------

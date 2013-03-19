@@ -31,6 +31,18 @@ openstack-glance-pkg:
     - names: 
       - openstack-glance
 
+glance:
+  user.present:
+    - fullname: OpenStack Glance Daemons
+    - shell: /sbin/nologin
+    - home: /var/lib/glance
+    - uid: 161
+    - gid: 161
+    - groups:
+      - lock
+    - require:
+      - pkg: openstack-glance-pkg
+
 openstack-glance-db-create:
   cmd.run:
     - name: mysql -u root -e "CREATE DATABASE glance;"
