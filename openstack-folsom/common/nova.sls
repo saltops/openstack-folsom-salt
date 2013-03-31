@@ -62,7 +62,7 @@ openstack-nova-service:
     - running
     - enable: True
     - names:
-% for svc in ['api', 'cert', 'console', 'consoleauth', 'metadata-api', 'novncproxy', 'scheduler', 'xvpvncproxy']:
+% for svc in ['api', 'cert', 'console', 'consoleauth', 'novncproxy', 'scheduler', 'xvpvncproxy']:
       - openstack-nova-${svc}
 % endfor
     - require:
